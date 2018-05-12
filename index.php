@@ -3,7 +3,11 @@ session_start();
 if(!isset($_SESSION['token'])) {
 	include_once("themes/pages/login.html");
 }
-else 
+elseif(! isset($_GET['q']))
+{
+	header("Location: index.php?q=welcome");
+}
+else
 {
 	$sessionid = $_SESSION['token'];
 	switch($_GET['q']){

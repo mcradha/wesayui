@@ -106,7 +106,7 @@
 										 </div>
             <div class="row">
               
-                <div class="col-lg-4">
+                <div class="col-lg-5">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <i class="fa fa-bell fa-fw"></i> My Traits
@@ -116,8 +116,13 @@
                                     <tr>
                                          <th>#</th>
 										 <th>Trait Name</th>
+										  <th>+ve</th>
+										  <th>-ve</th>
+										 
+										 <th>Ne</th>
 										  <th></th>
-										 <th></th>
+										   <th></th>
+										  
                                          
                                        
                                     </tr>
@@ -133,7 +138,7 @@
                      
                 </div>
 				
-				     <div class="col-lg-4">
+				     <div class="col-lg-3">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <i class="fa fa-bell fa-fw"></i> Populer Traits
@@ -200,8 +205,8 @@
    <script>
    $( document ).ready(function() {
 		getMyTraits("<?php echo $sessionid; ?>");
-		getPopuler("<?php echo $sessionid; ?>");
-		allTrait("<?php echo $sessionid; ?>");
+		getPopuler(1);
+		allTrait(1);
 		getMyFriendRequest();
 		});
 		 

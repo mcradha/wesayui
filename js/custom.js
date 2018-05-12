@@ -96,9 +96,69 @@ function applySettings(sid, authorizationToken){
 	
 	}
 
-function getMyTraits(authorizationToken) {
+	
+function getMyFriendsTraits(id) {
+	 
+	 var data = { "id" : id} ;
+	  
+	 $.ajax({
+    type: "POST",
+	beforeSend: function(request) {
+    request.setRequestHeader("X-Authorization", authorizationToken);
+   },
+     url: endpointurl+"/userTraits/getMyTraits/",
+    
+    data: JSON.stringify(data),
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    success: function(data){
+		$('#mytraits').html(data.length);
+		 var positive = 0;
+		 var negetive = 0;
+		 var neutral = 0;
+		var trHTML = '';
+        $.each(data, function (i, item) {
+			 if(parseInt(item.positive)==99999)
+			 {
+				 positive="";
+			 }
+			else
+			{
+				positive = item.positive;
+			}
+ if(parseInt(item.negetive)==99999)
+			 {
+				 negetive="";
+			 }
+			else
+			{
+				negetive = item.negetive;
+			}
+ if(parseInt(item.nutral)==99999)
+			 {
+				 neutral="";
+			 }
+			else
+			{
+				neutral = item.nutral;
+			}			
+		     trHTML += '<tr><td>' + (i +1) + '</td><td>' + item.traitname + '</td><td>' + positive + '</td><td>' + negetive + '</td><td>' + neutral + '</td></tr>';
+			 
+		});
+        $('#friends_table').append(trHTML);
+		  
+		},
+    failure: function(errMsg) {
+        alert(errMsg);
+    }
+});
+}
+
+	
+function getMyTraits() {
 	 
 	 var data = { } ;
+	  
 	 $.ajax({
     type: "POST",
 	beforeSend: function(request) {
@@ -267,7 +327,7 @@ function getMyFriends(){
 				trHTML += '<tr><td>' + (i +1) + '</td><td>' + item.fullname + '</td><td>' + item.addeddate + '</td><td>' + item.invitationacceptdate + '</td><td><span style="cursor:pointer" onclick='+func+' class="glyphicon glyphicon-ok"></span></td></tr>';
 			}
 			else if(parseInt(item.accept_status) == 3 ) {
-				trHTML += '<tr><td><input type="radio"  name="friend" value="'+item.friendsid+'"/></td><td>' + item.fullname + '</td><td>' + item.addeddate + '</td><td>' + item.invitationacceptdate + '</td><td><span style="cursor:pointer"   class="glyphicon glyphicon-user"></span></td></tr>';
+				trHTML += '<tr><td><input type="radio" onclick="getMyFriendsTraits(this.value)"  name="friend" value="'+item.friendsid+'"/></td><td>' + item.fullname + '</td><td>' + item.addeddate + '</td><td>' + item.invitationacceptdate + '</td><td><span style="cursor:pointer"   class="glyphicon glyphicon-user"></span></td></tr>';
 			}
 			
 			else

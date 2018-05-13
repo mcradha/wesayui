@@ -176,19 +176,19 @@ function getMyTraits() {
 		 var neutral = 0;
 		var trHTML = '';
         $.each(data, function (i, item) {
-			var func = "deleteTrait('"+authorizationToken+"','"+item.traituniqid+"')";
+			var func = "deleteTrait('"+item.traituniqid+"')";
 			var func1 = "";
 			
 			var func1class = "";
 			if(parseInt(item.ishidden) == 0 ) {
 				 
-				func1 = "ChangeStatusOfTrait('"+authorizationToken+"','"+item.traituniqid+"',0)";
+				func1 = "ChangeStatusOfTrait('"+item.traituniqid+"',0)";
 				func1class = "glyphicon glyphicon-remove";
 			}
 			else 
 			{
 				 
-				func1 = "ChangeStatusOfTrait('"+authorizationToken+"','"+item.traituniqid+"',1)";
+				func1 = "ChangeStatusOfTrait('"+item.traituniqid+"',1)";
 				func1class = "glyphicon glyphicon-ok";
 			}    
             trHTML += '<tr><td>' + (i +1) + '</td><td>' + item.traitname + '</td><td>' + item.positive + '</td><td>' + item.negetive + '</td><td>' + item.nutral + '</td><td><span style="cursor:pointer" onclick='+func+' class="glyphicon glyphicon-trash"></span></td><td><span style="cursor:pointer" onclick='+func1+' class=" '+func1class+'"></span></td></tr>';
@@ -366,7 +366,7 @@ function saveConatct()
 });
 }
 
-function ChangeStatusOfTrait(authorizationToken,traituniqid, statusValue ){
+function ChangeStatusOfTrait(traituniqid, statusValue ){
 	var ePoint = "";
 	if(statusValue ==0) {
 		ePoint = "/traitapi/hideTrait/";
@@ -458,7 +458,7 @@ function getPopuler(type) {
     }
 });
 }
-function deleteTrait(authorizationToken, traituniqid){
+function deleteTrait(traituniqid){
 	
 var c = confirm("Are you sure to delete ?");
 if(c) {

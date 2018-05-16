@@ -39,7 +39,7 @@
                                 </div>
                                 <div class="col-xs-9 text-right">
                                     <div class="huge" id="friendrequest">0</div>
-                                    <div>New Friends request</div>
+                                    <div>Traits Waiting For approval</div>
                                 </div>
                             </div>
                         </div>
@@ -137,7 +137,8 @@
 				 
                      
                 </div>
-				
+				  
+                
 				     <div class="col-lg-3">
                     <div class="panel panel-default">
                         <div class="panel-heading">
@@ -191,9 +192,37 @@
 				 
                      
                 </div>				 
-            </div>
+   <div class="col-lg-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-bell fa-fw"></i> Traits Waiting for approval
+                        </div>
+                                    <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example1">
+                                <thead>
+                                    <tr>
+                                         <th>#</th>
+										 <th>Trait Name</th>
+										  <th>Given By</th>
+										  
+                                         
+                                       
+                                    </tr>
+                                </thead>
+                                <tbody id="records_table4">
+                                    
+                                    
+                                </tbody>
+                            </table>
+             
+                    </div>
+				 
+                     
+                </div>           
+		   </div>
             <!-- /.row -->
-        </div>
+        
+		
+		</div>
 		
         <!-- /#page-wrapper -->
  
@@ -208,6 +237,7 @@
 		getPopuler(1);
 		allTrait(1);
 		getMyFriendRequest();
+		traitswiatingforapproval();
 		});
 		 
     

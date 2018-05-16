@@ -1,6 +1,27 @@
-//var endpointurl ="http://ec2-18-219-80-120.us-east-2.compute.amazonaws.com:8080";
-var endpointurl ="http://localhost:8080";
+var endpointurl ="http://ec2-18-219-80-120.us-east-2.compute.amazonaws.com:8080";
+//var endpointurl ="http://localhost:8080";
  
+function approveTrait(traitid) {
+	 var data = { "traituniqueid" : traitid} ;
+	 $.ajax({
+    type: "POST",
+	beforeSend: function(request) {
+    request.setRequestHeader("X-Authorization", authorizationToken);
+   },
+     url: endpointurl+"/traitapi/approvecustomtrait/",
+    
+    data: JSON.stringify(data),
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    success: function(data){
+	 window.location.href = window.location.href;		   
+		},
+    failure: function(errMsg) {
+        alert(errMsg);
+    }
+});
+
+}	
 function login() {
 	 
 	 var data = { "emailaddress": $("#txtusername").val(), "password": $("#txtpassword").val() } ;
@@ -112,12 +133,12 @@ function getMyFriendsTraits(id) {
     contentType: "application/json; charset=utf-8",
     dataType: "json",
     success: function(data){
-		$('#mytraits').html(data.length);
+		$('#mytraits').html(data['response'].length);
 		 var positive = 0;
 		 var negetive = 0;
 		 var neutral = 0;
 		var trHTML = '';
-        $.each(data, function (i, item) {
+        $.each(data['response'], function (i, item) {
 			 if(parseInt(item.positive)==99999)
 			 {
 				 positive="";
@@ -170,25 +191,25 @@ function getMyTraits() {
     contentType: "application/json; charset=utf-8",
     dataType: "json",
     success: function(data){
-		$('#mytraits').html(data.length);
+		$('#mytraits').html(data['response'].length);
 		 var positive = 0;
 		 var negetive = 0;
 		 var neutral = 0;
 		var trHTML = '';
-        $.each(data, function (i, item) {
-			var func = "deleteTrait('"+item.traituniqid+"')";
+        $.each(data['response'], function (i, item) {
+			var func = "deleteTrait('"+item.traituniqueid+"')";
 			var func1 = "";
 			
 			var func1class = "";
 			if(parseInt(item.ishidden) == 0 ) {
 				 
-				func1 = "ChangeStatusOfTrait('"+item.traituniqid+"',0)";
+				func1 = "ChangeStatusOfTrait('"+item.traituniqueid+"',0)";
 				func1class = "glyphicon glyphicon-remove";
 			}
 			else 
 			{
 				 
-				func1 = "ChangeStatusOfTrait('"+item.traituniqid+"',1)";
+				func1 = "ChangeStatusOfTrait('"+item.traituniqueid+"',1)";
 				func1class = "glyphicon glyphicon-ok";
 			}    
             trHTML += '<tr><td>' + (i +1) + '</td><td>' + item.traitname + '</td><td>' + item.positive + '</td><td>' + item.negetive + '</td><td>' + item.nutral + '</td><td><span style="cursor:pointer" onclick='+func+' class="glyphicon glyphicon-trash"></span></td><td><span style="cursor:pointer" onclick='+func1+' class=" '+func1class+'"></span></td></tr>';
@@ -366,7 +387,7 @@ function saveConatct()
 });
 }
 
-function ChangeStatusOfTrait(traituniqid, statusValue ){
+function ChangeStatusOfTrait(traituniqueid, statusValue ){
 	var ePoint = "";
 	if(statusValue ==0) {
 		ePoint = "/traitapi/hideTrait/";
@@ -376,7 +397,7 @@ function ChangeStatusOfTrait(traituniqid, statusValue ){
 		ePoint = "/traitapi/unhideTrait/";
 	}
 	  
-	var data = { "traituniqueid" : traituniqid} ;
+	var data = { "traituniqueid" : traituniqueid} ;
 	 $.ajax({
     type: "POST",
 	beforeSend: function(request) {
@@ -436,7 +457,7 @@ function getPopuler(type) {
     dataType: "json",
     success: function(data){
 		var trHTML = '';
-        $.each(data, function (i, item) {
+        $.each(data['response'], function (i, item) {
 			
             if(type!=1){
 			var func = "addTrait('"+item.traitname+"',999999,0)";
@@ -458,11 +479,11 @@ function getPopuler(type) {
     }
 });
 }
-function deleteTrait(traituniqid){
+function deleteTrait(traituniqueid){
 	
 var c = confirm("Are you sure to delete ?");
 if(c) {
-	var data = { "traituniqueid" :  traituniqid,"traitgivenfor":"0"} ;
+	var data = { "traituniqueid" :  traituniqueid,"traitgivenfor":"0"} ;
 	 $.ajax({
     type: "POST",
 	beforeSend: function(request) {
@@ -505,8 +526,7 @@ console.log(data);
     contentType: "application/json; charset=utf-8",
     dataType: "json",
     success: function(data){
-		 
-		// window.location.href = window.location.href;
+		window.location.href = window.location.href;
 		},
     failure: function(errMsg) {
         alert(errMsg);
@@ -514,6 +534,41 @@ console.log(data);
 });
  
 }
+
+function traitswiatingforapproval(){
+	var data =  "{}";
+  	
+ 
+	$.ajax({
+    type: "POST",
+	beforeSend: function(request) {
+    request.setRequestHeader("X-Authorization", authorizationToken);
+   },
+     url: endpointurl+"/traitapi/traitswiatingforapproval/",
+    
+    data: JSON.stringify(data),
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    success: function(data){
+		 $("#friendrequest").html(data.customResponse.number_of_traits);
+			 var trHTML = '';
+        $.each(data['response'], function (i, item) {
+			 
+			var func = "approveTrait('"+item.traituniqueid+"')";
+            trHTML += '<tr><td>' + (i +1) + '</td><td>' + item.traitname + '</td><td>' + item.fullname + '</td><td><span style="cursor:pointer" onclick='+func+' class="glyphicon glyphicon-thumbs-up"></span></td></tr>';
+			 
+			 		
+		});
+        $('#records_table4').append(trHTML);
+		},
+    failure: function(errMsg) {
+        alert(errMsg);
+    }
+});
+ 
+}
+
+
 
 function allTrait(type){
 	
@@ -531,7 +586,7 @@ function allTrait(type){
     dataType: "json",
     success: function(data){
 		 var trHTML = '';
-        $.each(data, function (i, item) {
+        $.each(data['response'], function (i, item) {
 			if(type==1){
 			var func = "addTrait('"+item.traitname+"',0,0)";
             trHTML += '<tr><td>' + (i +1) + '</td><td>' + item.traitname + '</td><td><span style="cursor:pointer" onclick='+func+' class="glyphicon glyphicon-plus"></span></td></tr>';
